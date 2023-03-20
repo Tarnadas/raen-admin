@@ -53,12 +53,29 @@ const Display: React.FC<React.PropsWithChildren<{
         </p>
       )}
       <h2>Return value</h2>
-      <SyntaxHighlighter
-        style={dark}
-        language="json"
-        children={result ?? "null"}
-        wrapLongLines
-      />
+      {
+        result.includes('⬜')
+          ? <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', width: '300px' }}>
+              {
+                result.startsWith('[')
+                  ? JSON.parse(result).map((val: string, idx: number) => idx === 0
+                    ? <div>{val}</div>
+                    : val.split('').map(c => c === '\n'
+                      ? <div style={{ flex: '1 0 100%' }} />
+                      : <span style={{ width: '28px', display: 'flex', justifyContent: 'center' }}>{c}</span>)
+                  )
+                  : result.split('').map(c => c === '\n'
+                    ? <div style={{ flex: '1 0 100%' }} />
+                    : <span style={{ width: '28px', display: 'flex', justifyContent: 'center' }}>{c}</span>)
+              }
+            </div>
+          : <SyntaxHighlighter
+            style={dark}
+            language="json"
+            children={result ?? "null"}
+            wrapLongLines
+          />
+      }
       {(logs && logs.length > 0) && (
         <>
           <h2>Logs</h2>
@@ -139,7 +156,7 @@ export function Form() {
         snake(method),
         formData?.args
       )
-      setResult(JSON.stringify(res, null, 2));
+      setResult(res instanceof Object ? JSON.stringify(res, null, 2) : res);
     } else {
       const user = await currentUser
       if (!user) throw new Error('Forbidden: must sign in')
