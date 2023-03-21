@@ -1,4 +1,4 @@
-import FormComponent, { WidgetProps } from "@rjsf/core";
+import FormComponent, { FieldProps, WidgetProps } from "@rjsf/core";
 import { useEffect, useMemo, useState } from "react"
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { anOldHope as dark } from 'react-syntax-highlighter/dist/cjs/styles/hljs'
@@ -9,10 +9,15 @@ import css from "./form.module.css"
 import { JSONSchema7 } from "json-schema"
 import { WithWBRs } from '..'
 import { prettifyJsonString } from "../../utils"
+import ReactMarkdown from 'react-markdown'
 
 const Textarea = (props: WidgetProps) => (
   <TextareaWidget {...props} options={{ rows: 1, ...props.options }} />
 )
+
+const Description = (props: FieldProps) => props.description != null
+  ? <><div style={{ height: '16px' }} /><ReactMarkdown>{props.description}</ReactMarkdown><div style={{ height: '16px' }} /></>
+  : <div />
 
 type Data = Record<string, any>
 
@@ -125,7 +130,12 @@ export const JsonSchemaForm: React.FC<React.PropsWithChildren<{
           key={title /* rerender when title/method changes */}
           className={css.form}
           disabled={!!whyForbidden}
-          widgets={{ TextWidget: Textarea }}
+          fields={{
+            DescriptionField: Description
+          }}
+          widgets={{
+            TextWidget: Textarea
+          }}
           uiSchema={{
             'ui:submitButtonOptions': {
               norender: hideSubmitButton,

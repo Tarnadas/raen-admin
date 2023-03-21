@@ -37,7 +37,7 @@
     "near-api-js": "github:AhaLabs/near-api-js#develop",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
-    "react-markdown": "^8.0.3",
+    "react-markdown": "^8.0.6",
     "react-router-dom": "6",
     "react-syntax-highlighter": "^15.5.0",
     "to-snake-case": "^1.0.0",
